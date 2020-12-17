@@ -1,5 +1,5 @@
 <?php
-
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,10 +33,10 @@ Route::get('tasks/show/{id}', function($id){
 
 });
 
-Route::get('app', function(){
+Route::get('todo', function(){
 
-    $tasks = DB::table('tasks')->get();
- 
+    // $tasks = DB::table('tasks')->get();
+    $tasks = Task::all();
     return view('todo', compact('tasks'));
 
 });
@@ -44,10 +44,22 @@ Route::get('app', function(){
 
 Route::post('store',function(Request $request){
 
-    DB::table('tasks')->insert([
-        'title'=> $request->title
-    ]);
+    // DB::table('tasks')->insert([
+    //     'title'=> $request->title
+    // ]);
+    $task = new Task();
+    $task->title = $request->title;
+    $task->save();
     return redirect()->back();
+});
+
+
+Route::post('task/{id}', function($id){
+    // DB::table('tasks')->where('id','=', $id)->delete();
+    $flight = Task::find($id);
+    $flight->delete();
+    return redirect()->back();
+
 });
 
 
